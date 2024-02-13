@@ -1,71 +1,116 @@
 import React, { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux'
 import imageLogin from 'assets/images/login/bg-estacionamento.jpg'
-import { ContainerGeral, ContainerLogin } from 'components/style-login'
+import bgCity from 'assets/images/login/city-nature.jpg'
 
+//Styled components
+import { ContainerGeral, ContainerLogin } from 'components/Login-styled'
+import { PrimaryButton } from 'components/Buttons-styled'
+import { PrimaryInput } from 'components/Inputs-styled'
+import { PrimaryTitle } from 'components/Titles-styled'
+import { PrimaryForm } from 'components/Forms-styled'
+import { ErrorMsg } from 'components/Errors-styled'
+import Loader from 'components/Loader'
+
+//API
 import API from 'pages/Api/Auth'
+
+import { userLogin } from '../../redux/user/actions';
 
 function Login() {
 
+    const { currentUser } = useSelector(rootReducer => rootReducer.userReducer)
+    const dispatch = useDispatch()
+
     const [dataLogin, setDataLogin] = useState({
-        user_login: '', user_password: ''
+        user_login: '', user_password: '', acao: 'Logar'
     })
 
-    const handleSubmitLogin = (e) => {
-        
+    const [loader, setLoader] = useState(false)
+
+    const [error, setError] = useState(false)
+
+    const handleSubmitLogin = async (e) => {
+
         e.preventDefault()
 
-        const dataAuth = {
-            user: dataLogin,
-            acao: 'Logar'
-        }
+        console.log({currentUser})
 
         try {
-            
-            API.Login(dataAuth).then(res => {
-                console.log(res.data)
-            })
-            
+
+            setLoader(true)
+
+            const { data } = await API.Login(dataLogin)
+
+
+            if(data.status === 'success') {
+
+                dispatch(userLogin(data.response))
+
+            }
+
         } catch (error) {
+
             console.log('Erro na requisição ' + error)
+            setError(true)
+
+        } finally {
+            setLoader(false)
         }
 
     }
 
     return (
+        <>
 
-        <ContainerGeral>
+            {
+                loader && <Loader />
+            }
 
-            <ContainerLogin bglogin={imageLogin}>
+            <ContainerGeral bgcity={bgCity}>
 
-                <div className='container-img'></div>
+                <ContainerLogin bglogin={imageLogin}>
 
-                <form onSubmit={handleSubmitLogin} className='container-form'>
-                    <h1>Park Ease</h1>
+                    <div className='container-img'></div>
 
-                    <fieldset>
-                        <input type='text' id='inputLogin'  placeholder='Login' autoComplete='false' onChange={(e) => setDataLogin((obj) => {
-                            return {...obj, user_login: e.target.value}
-                        })}/>
+                    <PrimaryForm onSubmit={handleSubmitLogin} className='container-form'>
+                        <PrimaryTitle>Park Ease</PrimaryTitle>
 
-                        <input type='password' id='inputPassword' placeholder='Senha' autoComplete='false' onChange={(e) => setDataLogin((obj) => {
-                            return {...obj, user_password: e.target.value}
-                        })}/>
+                        <fieldset>
+                            <PrimaryInput type='text' id='inputLogin' placeholder='Login' autoComplete='false' onChange={(e) => setDataLogin((obj) => {
+                                return { ...obj, user_login: e.target.value }
+                            })} />
 
-                        <button type='submit'>Entrar</button>
+                            <PrimaryInput type='password' id='inputPassword' placeholder='Senha' autoComplete='false' onChange={(e) => setDataLogin((obj) => {
+                                return { ...obj, user_password: e.target.value }
+                            })} />
 
-                    </fieldset>
+                            <PrimaryButton type='submit'>Entrar</PrimaryButton>
 
-                    <div className="opcoes">
-                        <a href="">Esqueci minha senha</a>
-                        <a href="">Cadastre-se</a>
-                    </div>
+                        </fieldset>
 
-                </form>
+                        <div className="opcoes">
+                            <Link to="#">Esqueci minha senha</Link>
+                            <Link to="/Cadastro">Cadastre-se</Link>
+                        </div>
 
-            </ContainerLogin>
+                        {
+                            error && (
+                                <ErrorMsg>
+                                    <p>Usuário ou senha incorretos!</p>
+                                </ErrorMsg>
+                            )
+                        }
 
-        </ContainerGeral>
 
+                    </PrimaryForm>
+
+                </ContainerLogin>
+
+            </ContainerGeral>
+
+        </>
     );
 }
 

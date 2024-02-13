@@ -10,7 +10,7 @@ export default {
             })
             .catch(error => {
                 console.log(error);
-            }); 
+            });
     },
 
     Cadastro(dataUser) {
@@ -20,6 +20,6 @@ export default {
             })
             .catch(error => {
                 console.log(error);
-            }); 
+            });
     }
 }

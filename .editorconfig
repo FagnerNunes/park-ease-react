@@ -1,0 +1,3 @@
+# Remove espaços vazios no final das linhas
+[*]
+trim_trailing_whitespace = true
