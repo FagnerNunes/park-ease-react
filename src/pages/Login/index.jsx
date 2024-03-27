@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import imageLogin from 'assets/images/login/bg-estacionamento.jpg'
 import bgCity from 'assets/images/login/city-nature.jpg'
 
@@ -20,42 +20,57 @@ import { userLogin } from '../../redux/user/actions';
 
 function Login() {
 
-    const { currentUser } = useSelector(rootReducer => rootReducer.userReducer)
     const dispatch = useDispatch()
 
+    const navigate = useNavigate();
+
     const [dataLogin, setDataLogin] = useState({
-        user_login: '', user_password: '', acao: 'Logar'
+        user_login: '', user_password: ''
     })
 
     const [loader, setLoader] = useState(false)
 
-    const [error, setError] = useState(false)
+    const [error, setError] = useState({
+        active: false, mensagem: ''
+    })
+
 
     const handleSubmitLogin = async (e) => {
 
         e.preventDefault()
-
-        console.log({currentUser})
+        setLoader(true)
 
         try {
 
-            setLoader(true)
+            const data = await API.Login(dataLogin)
 
-            const { data } = await API.Login(dataLogin)
-
+            console.log(data)
 
             if(data.status === 'success') {
 
                 dispatch(userLogin(data.response))
+                navigate('/')
 
             }
 
         } catch (error) {
 
-            console.log('Erro na requisição ' + error)
-            setError(true)
+            if (error.response.data.response) {
+
+                const mensagemDeErro = error.response.data.response;
+
+                setError((prev) => ({ ...prev, active: false, mensagem: mensagemDeErro }));
+            } else {
+
+                setError((prev) => ({ ...prev, active: false, mensagem: 'Não foi possível realizar a requisição.' }));
+            }
+
+            setLoader(false)
 
         } finally {
+            setError((prev) => {
+                return {...prev, active: false}
+            })
             setLoader(false)
         }
 
@@ -96,9 +111,9 @@ function Login() {
                         </div>
 
                         {
-                            error && (
+                            error.mensagem !== '' && (
                                 <ErrorMsg>
-                                    <p>Usuário ou senha incorretos!</p>
+                                    <p>{error.mensagem}</p>
                                 </ErrorMsg>
                             )
                         }

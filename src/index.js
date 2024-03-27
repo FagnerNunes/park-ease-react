@@ -3,11 +3,16 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from 'react-redux';
 import store from './redux/store'
-import Login from 'pages/Login/Login';
-import Cadastro from 'pages/Cadastro/Cadastro';
+import Login from 'pages/Login';
+import Cadastro from 'pages/Cadastro';
+import Painel from 'pages/Painel';
 import './index.css';
 
 const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Painel />
+    },
     {
         path: "/Login",
         element: <Login />

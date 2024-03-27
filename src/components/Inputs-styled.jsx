@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const PrimaryInput = styled.input`
     border: 1px solid transparent;
+    font-family: 'Poppins', sans-serif;
     padding: .5rem;
     transition: .3s;
 

@@ -18,8 +18,6 @@ class User
             self::$conexao = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
 
             self::$conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-
         } catch (PDOException $e) {
             // Em caso de erro na conexão
             echo "Falha na conexão: " . $e->getMessage();
@@ -29,7 +27,10 @@ class User
     public function get($user, $senha)
     {
         try {
+
             session_start();
+
+            self::$conexao->beginTransaction();
 
             $stmt = self::$conexao->prepare("SELECT * FROM users WHERE user_login = :user;");
             $stmt->bindValue(':user', $user);
@@ -37,40 +38,31 @@ class User
 
             if ($stmt->rowCount() > 0) {
 
-
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                // if (password_verify('1234', $row['user_password'])) {
-                //     echo json_encode(['passsssss' => 'Senha correta']);
-                //     return;
-                // } else {
-                //     echo json_encode(['passsssss' => 'Falha na verificacao']);
-                //     return;
-                // }
 
                 if (password_verify($senha, $row['user_password'])) {
 
-                    $_SESSION['USER']['id'] = $row['id_user'];
+
+                    $_SESSION['USER']['id'] = $row['id'];
                     $_SESSION['USER']['login'] = $row['user_login'];
                     $_SESSION['USER']['senha'] = $row['user_password'];
-                    $_SESSION['USER']['sessaoLogin'] = self::atualizarSessao($row['id_user']);
-                    $_SESSION['USER']['tokenAccess'] = password_hash($row['user_login'], PASSWORD_DEFAULT);
+                    $_SESSION['USER']['sessaoLogin'] = self::session_login($row['id']);
+                    $_SESSION['USER']['token'] = password_hash($row['user_login'], PASSWORD_DEFAULT);
+
+                    self::$conexao->commit();
 
                     return true;
-
                 } else {
 
                     session_destroy();
+                    self::$conexao->rollBack();
                     return false;
-
                 }
-
             } else {
 
                 session_destroy();
                 return false;
             }
-
         } catch (\Exception $ex) {
             return $ex->getMessage();
         }
@@ -80,6 +72,8 @@ class User
     {
         try {
 
+            self::$conexao->beginTransaction();
+
             $senhaPassword =  password_hash($senha, PASSWORD_DEFAULT);
 
             $stmt = self::$conexao->prepare("INSERT INTO users (user_login, user_password) VALUES (:user, :senha)");
@@ -87,15 +81,17 @@ class User
             $stmt->bindValue(':senha', $senhaPassword);
             $stmt->execute();
 
-            return true;
+            self::$conexao->commit();
 
+            return true;
         } catch (\Exception $ex) {
             error_log("Erro na inserção de usuário: " . $ex->getMessage());
+            self::$conexao->rollBack();
             return false;
         }
     }
 
-    public static function atualizarSessao ($id)
+    public static function session_login($id)
     {
         try {
             date_default_timezone_set('America/Sao_Paulo');
@@ -108,7 +104,6 @@ class User
             $stmt->execute();
 
             return $novaSessao;
-
         } catch (\Exception $ex) {
             error_log("Erro na inserção de sessão do usuário: " . $ex->getMessage());
             return false;

@@ -7,6 +7,7 @@ export const PrimaryButton = styled.button`
     box-shadow: 0 1px 3px .5px rgba(0, 0, 0, .2);
     color: white;
     cursor: pointer;
+    font-family: 'Poppins', sans-serif;
     font-weight: 500;
     letter-spacing: .5px;
     padding: .5rem;

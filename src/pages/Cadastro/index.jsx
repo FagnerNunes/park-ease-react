@@ -7,6 +7,7 @@ import { PrimaryButton } from 'components/Buttons-styled'
 import { PrimaryInput } from 'components/Inputs-styled'
 import { SecondTitle } from 'components/Titles-styled'
 import { PrimaryForm } from 'components/Forms-styled'
+import { ErrorMsg } from 'components/Errors-styled';
 import Loader from 'components/Loader'
 
 import API from 'pages/Api/Auth'
@@ -16,7 +17,11 @@ function Cadastro() {
     const navigate = useNavigate();
 
     const [dataCadastro, setDataCadastro] = useState({
-        user_login: '', user_password: '', acao: 'Cadastrar'
+        user_login: '', user_password: ''
+    })
+
+    const [error, setError] = useState({
+        active: false, mensagem: ''
     })
 
     const [loader, setLoader] = useState(false)
@@ -28,7 +33,7 @@ function Cadastro() {
         try {
             setLoader(true)
 
-            const { data } = await API.Cadastro(dataCadastro)
+            const data = await API.Cadastro(dataCadastro)
 
             if(data.status === 'success') {
                 alert('Usuário cadastrado com sucesso! Agora é só fazer login')
@@ -36,8 +41,23 @@ function Cadastro() {
             }
 
         } catch (error) {
-            console.log('Erro na requisição ' + error.message)
+
+            if (error.response.data.response) {
+
+                const mensagemDeErro = error.response.data.response;
+
+                setError((prev) => ({ ...prev, active: false, mensagem: mensagemDeErro }));
+            } else {
+
+                setError((prev) => ({ ...prev, active: false, mensagem: 'Não foi possível realizar a requisição.' }));
+            }
+
+            setLoader(false)
+
         } finally {
+            setError((prev) => {
+                return {...prev, active: false}
+            })
             setLoader(false)
         }
 
@@ -78,6 +98,14 @@ function Cadastro() {
                         <div className="opcoes">
                             <Link to="/Login">Fazer login</Link>
                         </div>
+
+                        {
+                            error.mensagem !== '' && (
+                                <ErrorMsg>
+                                    <p>{error.mensagem}</p>
+                                </ErrorMsg>
+                            )
+                        }
 
                     </PrimaryForm>
 
