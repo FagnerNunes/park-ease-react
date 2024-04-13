@@ -11,6 +11,7 @@ import Topo from './TopoOpcoes';
 
 import MenuDesktop from './Menu/desktop';
 import MenuMobile from './Menu/mobile';
+import Menu from './Menu/index';
 
 
 function Painel() {
@@ -40,7 +41,7 @@ function Painel() {
     // }
 
     const opcoes = [
-        { value: 'Estacionamento do Guilherme' },
+        { value: 'Estacionamento SP' },
         { value: 'Pare aqui - Estacionamento' }
     ]
 
@@ -53,9 +54,9 @@ function Painel() {
     return (
 
         <>
-            <ContainerPainel displaydesktop={windowSize.width < 1024 ? 'block' : 'flex'}>
+            <ContainerPainel style={{display: windowSize.width < 1024 ? 'block' : 'flex'}}>
 
-                { windowSize.width < 1024 ? <MenuMobile /> : <MenuDesktop /> }
+                <Menu />
 
                 <ContainerConteudo style={{padding: windowSize.width >= 1024 && '0'}}>
 

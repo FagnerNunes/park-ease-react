@@ -10,7 +10,7 @@ require_once MODEL . 'User.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     header("HTTP/1.1 200 OK");
-    exit();
+    exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

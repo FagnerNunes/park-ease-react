@@ -49,7 +49,7 @@ function Login() {
             if(data.status === 'success') {
 
                 dispatch(userLogin(data.response))
-                navigate('/')
+                navigate('/Painel')
 
             }
 

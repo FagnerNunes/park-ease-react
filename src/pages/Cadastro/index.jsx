@@ -37,7 +37,7 @@ function Cadastro() {
 
             if(data.status === 'success') {
                 alert('Usuário cadastrado com sucesso! Agora é só fazer login')
-                navigate('/Login')
+                navigate('/')
             }
 
         } catch (error) {
@@ -79,7 +79,7 @@ function Cadastro() {
 
                     <PrimaryForm onSubmit={handleSubmitCadastro} className='container-form'>
 
-                        <SecondTitle>Cadastre-se</SecondTitle>
+                        <SecondTitle destaque="on">Cadastre-se</SecondTitle>
 
                         <fieldset>
 
@@ -96,7 +96,7 @@ function Cadastro() {
                         </fieldset>
 
                         <div className="opcoes">
-                            <Link to="/Login">Fazer login</Link>
+                            <Link to="/">Fazer login</Link>
                         </div>
 
                         {

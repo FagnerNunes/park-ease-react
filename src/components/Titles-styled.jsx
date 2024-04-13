@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const PrimaryTitle = styled.h1`
-    color: ${(props) => props.desktop ? 'rgb(214, 25, 25)' : '#fff9f9' } ;
+    color: ${(props) => props.desktop ? 'rgb(214, 25, 25)' : '#fff9f9' };
     font-size: ${(props) => props.size ? props.size + 'rem' : 'clamp(2rem, 3vw, 2.5rem)'};
     text-shadow: ${(props) => props.desktop ? '1px 1px 2px rgba(34, 34, 34, 0.5)' : '1px 1px 1px rgb(226, 29, 29)' };
 

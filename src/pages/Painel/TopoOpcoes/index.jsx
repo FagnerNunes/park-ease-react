@@ -42,9 +42,9 @@ function Topo({ options }) {
             </div>
 
             <div className="options">
-                <span onClick={() => console.log('Configurações do usuário')}><FaUserCircle size={30} color='#555' /></span>
-                <span onClick={() => console.log('Notificações')}><FaBell size={30} color='#555' /></span>
-                <span onClick={() => console.log('Configurações')}><FaGear size={30} color='#555' /></span>
+                <span onClick={() => console.log('Configurações do usuário')}><FaUserCircle size={26} color='#555' /></span>
+                <span onClick={() => console.log('Notificações')}><FaBell size={26} color='#555' /></span>
+                <span onClick={() => console.log('Configurações')}><FaGear size={26} color='#555' /></span>
             </div>
         </Container>
     )

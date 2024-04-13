@@ -11,16 +11,16 @@ import './index.css';
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Painel />
-    },
-    {
-        path: "/Login",
         element: <Login />
     },
     {
         path: "/Cadastro",
         element: <Cadastro />
-    }
+    },
+    {
+        path: "/Painel",
+        element: <Painel />
+    },
 ])
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

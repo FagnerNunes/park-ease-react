@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const ContainerPainel = styled.main`
     background-color: rgb(255, 253, 253);
-    display: ${(props) => props.displaydesktop ? props.displaydesktop : 'block'};
+    display: 'flex';
     height: 100svh;
     font-family: 'Poppins', sans-serif;
     width: 100vw;

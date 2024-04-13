@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, } from 'react'
+import React, { useState } from 'react'
 import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components'
 
@@ -6,12 +6,8 @@ import styled from 'styled-components'
 import {
     IoIosArrowDropdownCircle,
     IoIosArrowDropupCircle,
-    IoIosArrowRoundBack
 } from "react-icons/io";
-import { RiMenu3Fill } from "react-icons/ri";
 
-import { FaBell, FaUserCircle } from "react-icons/fa";
-import { FaGear } from "react-icons/fa6";
 import { PrimaryTitle } from 'components/Titles-styled';
 
 function MenuDesktop() {
@@ -19,7 +15,7 @@ function MenuDesktop() {
     const Header = styled.header`
     align-items: center;
     background-color: #F7F7F7;
-    box-shadow: 0 0 10px .3px rgba(0, 0, 0, .1);
+    border-right: 1px solid rgba(0, 0, 0, .1);
     display: flex;
     justify-content: space-between;
     font-family: 'Poppins', sans-serif;
